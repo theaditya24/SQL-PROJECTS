@@ -1,0 +1,920 @@
+WALMART SALES ANALYSIS — PROJECT EXECUTION PLAN
+
+Purpose
+
+This file documents the complete journey of the Walmart Sales Analysis
+project based on the actual Jupyter Notebook. It is not intended to be
+traditional study notes. Instead, it explains:
+
+1.  What was done
+2.  Why it was done
+3.  Why this approach was chosen
+4.  What each stage prepared for
+5.  How the project moved from raw Kaggle data to MySQL
+
+PROJECT WORKFLOW
+
+Kaggle Dataset ↓ KaggleHub Download ↓ Local CSV ↓ Python / Pandas ↓ Data
+Inspection ↓ Data Cleaning ↓ Feature Engineering ↓ Final Validation ↓
+Clean CSV ↓ Python → MySQL ↓ MySQL Table ↓ SQL Business Analysis
+
+1. PROJECT OBJECTIVE
+
+The project is a Walmart Sales Analysis project using Python and SQL.
+
+The notebook is designed to use Python primarily for: - obtaining the
+dataset - inspecting the raw data - cleaning data-quality issues -
+creating analytical features - validating the prepared dataset -
+transferring the prepared data to MySQL
+
+MySQL is then used as the destination for the cleaned dataset and the
+planned environment for SQL-based business analysis.
+
+WHY THIS APPROACH?
+
+Python/Pandas is convenient for data preparation and transformation,
+while MySQL is well suited for structured querying, aggregation,
+filtering, ranking, and business analysis.
+
+2. IMPORTING THE DATASET DIRECTLY FROM KAGGLE
+
+The notebook installs and uses KaggleHub:
+
+    pip install kagglehub
+
+Then:
+
+    import kagglehub
+
+    path = kagglehub.dataset_download(
+        "najir0123/walmart-10k-sales-datasets"
+    )
+
+The downloaded files are copied into the project’s local datasets
+directory.
+
+WHY?
+
+The dataset is obtained directly from its original Kaggle source rather
+than relying on a manually downloaded file. This makes the project
+easier to reproduce and keeps the data-acquisition process documented in
+the notebook.
+
+PROJECT RESULT
+
+The raw Walmart.csv file is placed inside the project’s datasets folder.
+
+3. IMPORTING PYTHON LIBRARIES
+
+The notebook imports:
+
+    numpy
+    pandas
+    matplotlib
+    seaborn
+
+WHY?
+
+Pandas is the primary library used for loading, cleaning, transforming,
+and validating the tabular dataset.
+
+NumPy is available for numerical operations.
+
+Matplotlib and Seaborn are imported for potential visualization and
+exploratory analysis, although the current notebook does not contain a
+substantial visualization section.
+
+4. LOADING THE RAW DATASET
+
+The dataset is loaded using:
+
+    df = pd.read_csv("../datasets/Walmart.csv")
+
+WHY?
+
+The notebook needs the raw CSV in a Pandas DataFrame so that the data
+can be inspected and transformed programmatically.
+
+The relative path is used because the notebook is stored inside the
+notebooks folder while the dataset is stored inside the datasets folder.
+
+OUTPUT
+
+The first rows are displayed using:
+
+    df.head()
+
+5. INITIAL DATASET INSPECTION
+
+The notebook examines: - dataset shape - data types - descriptive
+statistics
+
+Commands include:
+
+    df.shape
+    df.info()
+    df.describe(include='all')
+
+WHY?
+
+Before changing anything, it is important to understand: - how many
+records exist - which columns exist - which columns are numeric or
+textual - whether columns have unexpected data types - the general
+distribution and characteristics of the data
+
+This establishes a baseline before cleaning.
+
+6. CHECKING AND HANDLING MISSING VALUES
+
+The notebook checks missing values using:
+
+    df.isnull().sum()
+
+It specifically checks the percentage of missing values in:
+
+    unit_price
+    quantity
+
+The notebook then removes rows with missing values in these columns:
+
+    df = df.dropna(subset=['unit_price', 'quantity'])
+
+WHY?
+
+The notebook determines that the missing values are less than 1% of the
+total records. Because the missing proportion is very small, the rows
+are dropped instead of being imputed.
+
+WHY NOT IMPUTE?
+
+For this project, these fields are directly involved in sales
+calculations. Introducing estimated values for price or quantity could
+create artificial transaction values. Since the number of affected
+records is very small, removing them is a simpler and more transparent
+choice.
+
+VALIDATION
+
+The notebook checks again:
+
+    df.isnull().sum()
+
+to confirm that missing values have been handled.
+
+7. CHECKING FOR DUPLICATE RECORDS
+
+The notebook checks:
+
+    df.duplicated().sum()
+
+It also checks:
+
+    df["invoice_id"].duplicated().sum()
+
+WHY?
+
+Duplicate records can cause the same transaction to be counted more than
+once. That would distort: - sales - quantity - profit - transaction
+counts - other aggregated business metrics
+
+Checking invoice IDs separately is useful because it helps distinguish
+exact duplicate rows from repeated invoice identifiers.
+
+8. REMOVING EXACT DUPLICATES
+
+The notebook removes duplicate rows using:
+
+    df = df.drop_duplicates().reset_index(drop=True)
+
+WHY?
+
+Exact duplicate records do not provide additional business information
+and can incorrectly inflate analytical results.
+
+The index is reset afterward so that the DataFrame has a clean
+sequential index after rows have been removed.
+
+IMPORTANT OBSERVATION
+
+The notebook identifies duplicate rows before removing them. The final
+analysis should therefore use the deduplicated DataFrame rather than the
+original raw records.
+
+9. STANDARDIZING COLUMN NAMES
+
+The notebook standardizes column names using:
+
+    df.columns = (
+        df.columns
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "_")
+    )
+
+WHY?
+
+Consistent column names make the dataset easier to use in both Python
+and SQL.
+
+For example: - spaces are removed/replaced - capitalization is
+standardized - names become SQL-friendly
+
+This reduces the chance of errors when referencing columns later in
+MySQL.
+
+10. CLEANING UNIT PRICE
+
+The notebook first checks the data type of unit_price.
+
+The values contain a currency symbol, so the notebook removes “$”,
+strips whitespace, and converts the result to float:
+
+    df['unit_price'] = (
+        df['unit_price']
+        .str.replace("$", "", regex=False)
+        .str.strip()
+        .astype(float)
+    )
+
+WHY?
+
+A value such as “$74.69” is text, not a numeric value.
+
+Financial calculations such as:
+
+    unit_price × quantity
+
+cannot be performed reliably while the price is stored as a string.
+
+Converting the column to float makes it usable for mathematical
+calculations and SQL analysis.
+
+11. CONVERTING QUANTITY TO INTEGER
+
+The notebook converts:
+
+    df["quantity"] = df["quantity"].astype(int)
+
+WHY?
+
+Quantity represents the number of units sold. It is a whole-number
+business measure, so integer is the appropriate data type.
+
+This also makes aggregation and validation more meaningful.
+
+12. CONVERTING TRANSACTION DATE
+
+The notebook converts the date using:
+
+    df['date'] = pd.to_datetime(
+        df['date'],
+        format='%d/%m/%y'
+    )
+
+WHY?
+
+The raw date is stored as text. Converting it to datetime allows the
+notebook to extract: - year - month - quarter - day of week - weekend
+information
+
+It also makes time-based analysis possible later in SQL.
+
+13. CONVERTING TRANSACTION TIME
+
+The notebook converts time using:
+
+    df['time'] = pd.to_datetime(
+        df['time'],
+        format='%H:%M:%S'
+    )
+
+WHY?
+
+A proper time/datetime representation allows the project to derive the
+transaction hour and subsequently analyze customer purchasing patterns
+throughout the day.
+
+14. STANDARDIZING CATEGORICAL COLUMNS
+
+The notebook applies string trimming to:
+
+    branch
+    city
+    category
+    payment_method
+
+using:
+
+    df[col] = df[col].str.strip()
+
+WHY?
+
+Unwanted leading or trailing spaces can create apparently different
+categories during grouping.
+
+For example:
+
+    "Yangon"
+    " Yangon"
+
+could be treated as different values.
+
+Removing unnecessary whitespace makes categorical values more consistent
+for SQL GROUP BY operations.
+
+15. VALIDATING NUMERICAL VALUES
+
+The notebook checks: - unit prices less than or equal to zero -
+quantities less than or equal to zero - ratings outside the 0–10 range -
+profit margins outside the 0–1 range
+
+WHY?
+
+A dataset can have no missing values and still contain invalid values.
+
+These checks enforce basic business logic: - prices should be positive -
+quantities should be positive - ratings should remain within their
+expected scale - profit margin should be between 0 and 1
+
+This is a validation stage rather than a transformation stage.
+
+16. FEATURE ENGINEERING
+
+After cleaning, the notebook begins feature engineering.
+
+The purpose is to create additional variables that directly support
+business questions that will later be answered in SQL.
+
+17. CREATING TOTAL SALES
+
+The notebook creates:
+
+    df['total_sales'] = df['unit_price'] * df['quantity']
+
+WHY?
+
+The raw dataset provides unit price and quantity separately. Multiplying
+them produces transaction-level sales/revenue.
+
+Example:
+
+    Unit Price × Quantity = Total Sales
+
+This makes later SQL analysis much easier because revenue is already
+available as a transaction-level metric.
+
+18. CREATING GROSS PROFIT
+
+The notebook creates:
+
+    df['gross_profit'] = df['total_sales'] * df['profit_margin']
+
+WHY?
+
+Profit margin represents the proportion of sales retained as profit.
+Multiplying total sales by profit margin produces an estimated
+transaction-level gross profit value.
+
+This allows the project to analyze not only revenue but also
+profitability.
+
+19. EXTRACTING YEAR
+
+The notebook creates:
+
+    df["year"] = df["date"].dt.year
+
+WHY?
+
+Year allows the project to perform year-level comparisons and time-based
+aggregation.
+
+It is also more convenient in SQL than repeatedly extracting the year
+from the original date.
+
+20. EXTRACTING MONTH
+
+The notebook creates:
+
+    df["month"] = df["date"].dt.month
+
+WHY?
+
+Month supports monthly sales and profitability analysis and makes it
+possible to compare performance across months.
+
+21. CREATING MONTH NAME
+
+The notebook creates:
+
+    df["month_name"] = df["date"].dt.month_name()
+
+WHY?
+
+The numeric month is useful for sorting and calculations, while the
+month name is easier to understand in reports and business summaries.
+
+22. CREATING QUARTER
+
+The notebook creates:
+
+    df["quarter"] = df["date"].dt.quarter
+
+WHY?
+
+Quarter-level features allow the project to analyze broader seasonal or
+quarterly performance patterns.
+
+23. CREATING DAY OF WEEK
+
+The notebook creates:
+
+    df["day_of_week"] = df["date"].dt.day_name()
+
+WHY?
+
+This supports analysis of purchasing patterns across different weekdays.
+
+Possible business questions include: - Which day generates the most
+sales? - Are certain categories stronger on particular days?
+
+24. CREATING WEEKEND INDICATOR
+
+The notebook creates:
+
+    df["is_weekend"] = df["date"].dt.dayofweek >= 5
+    df["is_weekend"] = df["is_weekend"].astype(int)
+
+The resulting values represent:
+
+    0 = Weekday
+    1 = Weekend
+
+WHY?
+
+A binary flag makes it easy to compare weekend and weekday performance
+using SQL.
+
+It can support questions such as: - Are weekend sales higher? - Which
+category performs better on weekends? - Which branches benefit most from
+weekend traffic?
+
+25. EXTRACTING TRANSACTION HOUR
+
+The notebook creates:
+
+    df["hour"] = pd.to_datetime(
+        df["time"].astype(str)
+    ).dt.hour
+
+WHY?
+
+The hour enables hourly sales analysis and provides the basis for
+understanding when transactions are most frequent or valuable.
+
+26. CREATING CUSTOMER RATING CATEGORY
+
+The notebook creates a categorical rating feature:
+
+    if rating >= 8:
+        "Excellent"
+    elif rating >= 6:
+        "Good"
+    elif rating >= 4:
+        "Average"
+    else:
+        "Poor"
+
+WHY?
+
+The raw rating is numerical. Grouping ratings into categories makes
+customer satisfaction easier to summarize and compare in SQL.
+
+The categories created by the notebook are: - Excellent - Good -
+Average - Poor
+
+27. FINAL DATA QUALITY CHECK
+
+The notebook performs final validation using:
+
+    df.info()
+    df.duplicated().sum()
+
+WHY?
+
+After all transformations, the project verifies that: - the DataFrame
+structure is still valid - data types are appropriate - duplicate
+records are no longer present
+
+This acts as a final checkpoint before the data is exported.
+
+28. SELECTING FINAL ANALYTICAL COLUMNS
+
+The notebook explicitly defines the final column order.
+
+The final analytical dataset contains:
+
+    invoice_id
+    branch
+    city
+    category
+    unit_price
+    quantity
+    total_sales
+    profit_margin
+    gross_profit
+    date
+    year
+    month
+    month_name
+    quarter
+    day_of_week
+    is_weekend
+    time
+    hour
+    payment_method
+    rating
+    rating_category
+
+WHY?
+
+Explicitly selecting and ordering columns produces a clean analytical
+dataset instead of carrying unnecessary or intermediate columns into
+MySQL.
+
+29. EXPORTING THE CLEAN DATASET
+
+The notebook exports:
+
+    df.to_csv(
+        "../datasets/walmart_sales_cleaned.csv",
+        index=False
+    )
+
+WHY?
+
+The cleaned CSV becomes a reproducible intermediate data product.
+
+It provides: - a clean backup of the prepared dataset - a source that
+can be imported into MySQL - a clear separation between raw data and
+processed data
+
+30. CONNECTING PYTHON TO MYSQL
+
+The notebook first installs:
+
+    pip install mysql-connector-python
+
+Then imports:
+
+    import mysql.connector
+
+A direct connection is created to:
+
+    host = localhost
+    user = root
+    database = walmart_sales
+
+WHY?
+
+The purpose of this stage is to establish communication between Python
+and the local MySQL database.
+
+The notebook verifies the connection using:
+
+    SELECT DATABASE();
+
+and confirms that the active database is:
+
+    walmart_sales
+
+This proves that Python can communicate with the intended MySQL
+database.
+
+31. WHY SQLALCHEMY AND PYMYSQL WERE ALSO INSTALLED
+
+The notebook later installs:
+
+    pip install sqlalchemy pymysql
+
+Then creates an SQLAlchemy engine using the PyMySQL driver.
+
+Conceptually:
+
+    Pandas
+       ↓
+    SQLAlchemy
+       ↓
+    PyMySQL
+       ↓
+    MySQL
+
+WHY?
+
+mysql.connector provides a direct Python-to-MySQL connection.
+
+SQLAlchemy provides a higher-level database interface that works
+conveniently with Pandas, particularly with:
+
+    df.to_sql()
+
+PyMySQL is the MySQL driver used underneath the SQLAlchemy connection.
+
+Therefore, the notebook uses mysql.connector to directly test the MySQL
+connection and then uses SQLAlchemy + PyMySQL for convenient
+DataFrame-to-MySQL transfer.
+
+IMPORTANT PROJECT NOTE
+
+For the final streamlined version of the project, using SQLAlchemy +
+PyMySQL alone is sufficient for the DataFrame upload. The initial
+mysql.connector connection can be viewed as an explicit connection test
+and is not strictly required if it is not used later.
+
+32. HANDLING THE MYSQL PASSWORD
+
+Because the password contains a special character such as “@”, the
+notebook uses:
+
+    from urllib.parse import quote_plus
+
+    password = quote_plus("...")
+
+This encoded password is then used in the SQLAlchemy connection string.
+
+WHY?
+
+Special characters have meanings inside database URLs. Encoding the
+password prevents characters such as “@” from being incorrectly
+interpreted as part of the hostname or connection structure.
+
+SECURITY NOTE
+
+The current notebook contains a hardcoded database password.
+
+Before publishing this project to GitHub, the password should be changed
+and removed from the notebook. A safer approach is to store credentials
+in environment variables or a .env file that is excluded from version
+control.
+
+33. TESTING THE SQLALCHEMY CONNECTION
+
+The notebook tests the SQLAlchemy engine using:
+
+    pd.read_sql(
+        "SELECT DATABASE() AS database_name",
+        engine
+    )
+
+WHY?
+
+This confirms that the SQLAlchemy/PyMySQL connection can successfully
+communicate with the intended MySQL database before attempting to upload
+the full dataset.
+
+34. LOADING THE CLEANED CSV
+
+The notebook reloads:
+
+    cleaned_Df = pd.read_csv(
+        "../datasets/walmart_sales_cleaned.csv"
+    )
+
+WHY?
+
+The project intentionally uses the exported cleaned CSV as the input to
+the database-loading stage.
+
+This creates a clear boundary:
+
+    Python Cleaning
+          ↓
+    Clean CSV
+          ↓
+    MySQL Loading
+
+It also demonstrates that the final cleaned dataset can be reused
+independently of the original DataFrame state.
+
+35. UPLOADING THE DATASET TO MYSQL
+
+The notebook uses:
+
+    cleaned_Df.to_sql(
+        "walmart_sales",
+        engine,
+        if_exists="replace",
+        index=False
+    )
+
+WHY?
+
+Pandas handles the conversion of the DataFrame into SQL table rows.
+
+The table is named:
+
+    walmart_sales
+
+if_exists="replace" means that if the table already exists, it is
+replaced with the current cleaned dataset.
+
+index=False prevents the Pandas DataFrame index from being added as an
+unnecessary database column.
+
+36. VERIFYING THE MYSQL TABLE
+
+The notebook checks the uploaded table using:
+
+    SELECT * FROM walmart_sales LIMIT 5
+
+WHY?
+
+This verifies that records were successfully transferred and allows the
+first few rows to be visually checked.
+
+The notebook also runs:
+
+    SELECT COUNT(*) AS total_rows
+    FROM walmart_sales
+
+WHY?
+
+Counting the rows confirms that the expected number of cleaned records
+has reached MySQL.
+
+37. CURRENT PROJECT STATE
+
+The notebook currently completes the pipeline up to loading and
+verifying the cleaned dataset in MySQL.
+
+The logical pipeline is now:
+
+    Kaggle
+      ↓
+    KaggleHub
+      ↓
+    Walmart.csv
+      ↓
+    Pandas
+      ↓
+    Missing-value handling
+      ↓
+    Duplicate removal
+      ↓
+    Data-type correction
+      ↓
+    Data validation
+      ↓
+    Feature engineering
+      ↓
+    Final cleaned dataset
+      ↓
+    walmart_sales_cleaned.csv
+      ↓
+    SQLAlchemy + PyMySQL
+      ↓
+    MySQL: walmart_sales
+
+38. WHAT SHOULD COME NEXT — SQL ANALYSIS
+
+The notebook shown does not yet contain the main SQL business-analysis
+section.
+
+The next project stage should therefore be performed in MySQL.
+
+The purpose of moving to MySQL is to answer business questions using SQL
+rather than simply displaying the cleaned DataFrame.
+
+Potential analytical areas include:
+
+-   Total revenue and total profit
+-   Revenue by branch
+-   Revenue by city
+-   Revenue by category
+-   Profitability by category
+-   Monthly and quarterly sales trends
+-   Weekend vs weekday performance
+-   Sales by day of week
+-   Sales by hour
+-   Sales by time of day
+-   Payment-method performance
+-   Customer rating patterns
+-   Top-performing branches
+-   Top-performing categories
+-   Category performance within each city
+-   Ranking branches or categories
+-   Trend and growth analysis
+
+39. WHY MYSQL FOR THE ANALYSIS?
+
+The project separates preparation from analysis.
+
+Python is used for: - data acquisition - cleaning - transformation -
+feature creation
+
+MySQL is used for: - querying - aggregation - filtering - grouping -
+ranking - business analysis
+
+This separation makes the project demonstrate both Python
+data-preparation skills and SQL analytical skills.
+
+40. COMPLETE PROJECT MENTAL MODEL
+
+Think of the project as four major phases:
+
+PHASE 1 — DATA ACQUISITION
+
+Get the original dataset from Kaggle and store it locally.
+
+Goal: Obtain reliable raw data.
+
+PHASE 2 — DATA PREPARATION
+
+Inspect, clean, validate, and transform the raw data using Pandas.
+
+Goal: Turn messy/raw transactional data into a reliable analytical
+dataset.
+
+PHASE 3 — DATA ENGINEERING / DATABASE LOADING
+
+Export the clean dataset and load it into MySQL.
+
+Goal: Create a structured SQL-ready dataset.
+
+PHASE 4 — BUSINESS ANALYSIS
+
+Use MySQL to answer business questions and derive insights.
+
+Goal: Convert prepared data into actionable business findings.
+
+41. WHY WE DID NOT DO OTHER THINGS
+
+This project is a SQL/business-analysis project rather than a
+machine-learning project.
+
+Therefore, the notebook does NOT need: - train/test split - feature
+scaling - one-hot encoding - label encoding - model training - model
+evaluation - standardization for ML algorithms
+
+Those techniques are appropriate when preparing data for machine
+learning models, but they are not necessary for this transactional SQL
+analysis.
+
+The feature engineering performed here is business-oriented: - revenue -
+profit - time dimensions - weekend flag - rating categories
+
+These features directly support analytical SQL questions.
+
+42. INTERVIEW-READY EXPLANATION
+
+If asked to explain the project in an interview:
+
+“I started by obtaining the Walmart sales dataset directly from Kaggle
+using KaggleHub. I then loaded the data into Pandas and performed an
+initial data-quality assessment by checking its structure, data types,
+missing values, and duplicates. Since the missing values in unit price
+and quantity represented less than 1% of the records, I removed those
+affected rows rather than introducing estimated values. I also removed
+exact duplicate records to prevent transaction metrics from being
+inflated.
+
+Next, I standardized the column names and corrected data types,
+including converting unit price from currency-formatted text to numeric
+and converting date and time fields into appropriate datetime
+representations. I then validated numerical fields against basic
+business rules.
+
+After cleaning, I performed business-oriented feature engineering by
+creating total sales, gross profit, year, month, month name, quarter,
+day of week, weekend indicator, transaction hour, and customer rating
+categories.
+
+The final cleaned dataset was exported to CSV and then loaded into a
+MySQL database using SQLAlchemy with PyMySQL. I verified the database
+connection and the uploaded records. The final stage of the project is
+to use MySQL to perform business-focused SQL analysis and derive
+insights from the prepared transactional data.”
+
+43. FINAL TAKEAWAY
+
+The key idea behind the project is not simply “clean the data and put it
+in MySQL.”
+
+The project follows a deliberate progression:
+
+RAW DATA → Understand the data
+
+DATA QUALITY → Find and fix problems
+
+CLEAN DATA → Make values reliable and consistent
+
+FEATURE ENGINEERING → Create metrics and dimensions that answer business
+questions
+
+MYSQL → Store the analytical dataset in a structured database
+
+SQL ANALYSIS → Ask business questions
+
+BUSINESS INSIGHTS → Explain what the numbers mean
+
+END OF PROJECT EXECUTION PLAN
