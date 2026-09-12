@@ -1,53 +1,83 @@
 # 📊 SQL Projects — Data Analytics Portfolio
 
-<div align="center">
-
 ### Turning Raw Data into Business Insights with SQL
 
-**A collection of end-to-end SQL analytics projects focused on solving real-world business problems through data exploration, transformation, and analysis.**
+A growing collection of **real-world SQL data analytics projects** focused on solving business problems through data exploration, transformation, analysis, and insight generation.
 
-<br>
-
-[![SQL](https://img.shields.io/badge/SQL-MySQL%20%7C%20PostgreSQL-blue?style=for-the-badge\&logo=mysql\&logoColor=white)](https://www.mysql.com/)
-[![GitHub](https://img.shields.io/badge/GitHub-Projects-black?style=for-the-badge\&logo=github)](https://github.com/theaditya24)
-[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://github.com/theaditya24/SQL-PROJECTS)
-
-</div>
+> **Business Question → Data → SQL → Analysis → Insight → Decision**
 
 ---
 
 ## 👋 About This Repository
 
-Welcome to my **SQL Projects Portfolio**.
+Welcome to my **SQL & Data Analytics Portfolio**.
 
-This repository documents my journey in **Data Analytics and SQL**, with projects designed around realistic business scenarios rather than isolated SQL syntax exercises.
+This repository contains practical SQL projects built around realistic business scenarios across different industries, including:
 
-The goal is simple:
+* 🎬 Entertainment & Streaming
+* 🍕 Food & Restaurant Analytics
+* 🛒 Retail & Sales Analytics
 
-> **Take raw data → ask meaningful business questions → use SQL to analyze the data → generate actionable insights.**
+The purpose of this repository is not simply to demonstrate SQL syntax.
 
-The projects demonstrate practical SQL skills including **data exploration, joins, aggregation, subqueries, CTEs, window functions, ranking, date analysis, string manipulation, and business-oriented problem solving.**
+Instead, each project follows a business-oriented analytical approach:
+
+```text
+Raw Data
+   ↓
+Data Understanding
+   ↓
+Business Questions
+   ↓
+SQL Analysis
+   ↓
+Advanced SQL Techniques
+   ↓
+Insights
+   ↓
+Business Recommendations
+```
+
+The projects demonstrate practical skills in:
+
+* SQL querying
+* Data exploration
+* Data aggregation
+* Relational data analysis
+* Multi-table joins
+* Subqueries
+* CTEs
+* Window functions
+* Ranking
+* Date & time analysis
+* String manipulation
+* Revenue analysis
+* Customer analysis
+* Product performance analysis
+* Business problem solving
 
 ---
 
 # 🚀 Projects
 
-| Project                       | Domain                    | Key Focus                                            | Difficulty |
-| ----------------------------- | ------------------------- | ---------------------------------------------------- | ---------- |
-| 🎬 **Netflix Data Analysis**  | Entertainment / Streaming | Content trends, countries, genres, ratings & actors  | ⭐⭐⭐        |
-| 🍕 **Pizza Sales Case Study** | Food & Retail             | Orders, revenue, products, categories & sales trends | ⭐⭐⭐        |
+| #  | Project                       | Industry                  | Key Focus                                            | Difficulty |
+| -- | ----------------------------- | ------------------------- | ---------------------------------------------------- | ---------- |
+| 01 | 🎬 **Netflix Data Analysis**  | Entertainment / Streaming | Content trends, genres, countries, ratings & actors  | ⭐⭐⭐        |
+| 02 | 🍕 **Pizza Sales Case Study** | Food & Retail             | Orders, revenue, products, categories & sales trends | ⭐⭐⭐        |
+| 03 | 🛒 **Walmart Sales Analysis** | Retail / E-Commerce       | Sales, customers, products, branches & profitability | ⭐⭐⭐        |
 
 ---
 
 # 🎬 01 — Netflix Data Analysis
 
-### 📌 Project Overview
+## 📌 Project Overview
 
-The **Netflix Data Analysis Project** explores Netflix's catalog of movies and TV shows to answer practical business questions around:
+The **Netflix Data Analysis Project** explores Netflix's catalog of movies and TV shows to answer practical business questions related to content distribution, audience preferences, and platform trends.
 
-* Content distribution
+The analysis focuses on:
+
 * Movies vs TV Shows
-* Ratings
+* Content ratings
 * Release years
 * Countries
 * Genres
@@ -57,11 +87,13 @@ The **Netflix Data Analysis Project** explores Netflix's catalog of movies and T
 * Indian content
 * Content classification
 
-The project contains a dedicated SQL schema and a collection of **15 business problems and solutions**.
+The project contains a dedicated SQL schema and a collection of business problems and solutions.
 
-### 🔍 Business Questions
+---
 
-Some of the questions addressed include:
+## 🔍 Business Questions
+
+The project investigates questions such as:
 
 * How many Movies vs TV Shows are available?
 * What are the most common ratings?
@@ -74,11 +106,13 @@ Some of the questions addressed include:
 * What are the release trends for Indian content?
 * Which movies are documentaries?
 * Which content does not have a listed director?
-* How frequently has a particular actor appeared in recent content?
+* Which actors appear most frequently?
 * Who are the top actors in Indian Netflix content?
-* How can content be categorized based on keywords in descriptions?
+* How can content be categorized using keywords in descriptions?
 
-### 🧠 SQL Techniques Demonstrated
+---
+
+## 🧠 SQL Techniques Demonstrated
 
 ```text
 SELECT / WHERE
@@ -95,9 +129,9 @@ Pattern Matching
 Data Categorization
 ```
 
-### ⭐ Advanced SQL Example
+### ⭐ Advanced SQL
 
-The project uses window functions to identify the most common ratings within each content type:
+The project uses window functions to perform ranking within content types:
 
 ```sql
 DENSE_RANK() OVER (
@@ -106,7 +140,12 @@ DENSE_RANK() OVER (
 )
 ```
 
-It also demonstrates handling multi-valued fields such as countries, genres, directors, and actors through string transformation techniques.
+It also demonstrates techniques for handling multi-valued fields such as:
+
+* Countries
+* Genres
+* Directors
+* Actors
 
 ### 📁 Project Files
 
@@ -119,15 +158,17 @@ Netflix Project/
 └── logo.png
 ```
 
-👉 **[Explore Netflix Project](https://github.com/theaditya24/SQL-PROJECTS/tree/main/Netflix%20Project)**
+👉 **[Explore Netflix Project](./Netflix%20Project)**
 
 ---
 
 # 🍕 02 — Pizza Sales Case Study
 
-### 📌 Project Overview
+## 📌 Project Overview
 
-The **Pizza Sales Case Study** analyzes transactional restaurant data to understand:
+The **Pizza Sales Case Study** analyzes transactional restaurant data to understand sales performance, product demand, revenue generation, and customer ordering patterns.
+
+The analysis covers:
 
 * Order volume
 * Revenue
@@ -137,12 +178,12 @@ The **Pizza Sales Case Study** analyzes transactional restaurant data to underst
 * Customer ordering patterns
 * Peak ordering periods
 * Revenue contribution
-* Cumulative sales
-* Category-wise rankings
+* Cumulative revenue
+* Category-level rankings
 
-The project includes the raw CSV datasets, business questions, and SQL solutions.
+---
 
-### 📊 Dataset Structure
+## 📊 Dataset Structure
 
 The project uses four related datasets:
 
@@ -150,15 +191,17 @@ The project uses four related datasets:
 orders
    │
    └── order_details
-            │
-            └── pizzas
-                   │
-                   └── pizza_types
+          │
+          └── pizzas
+                 │
+                 └── pizza_types
 ```
 
-### 🔍 Business Analysis
+---
 
-The analysis investigates questions such as:
+## 🔍 Business Questions
+
+The analysis investigates:
 
 * Total number of orders
 * Total revenue generated
@@ -173,7 +216,9 @@ The analysis investigates questions such as:
 * Cumulative revenue
 * Top-performing pizzas within each category
 
-### 🧠 SQL Techniques Demonstrated
+---
+
+## 🧠 SQL Techniques Demonstrated
 
 ```text
 INNER JOIN
@@ -192,7 +237,7 @@ Revenue Analysis
 Cumulative Analysis
 ```
 
-### ⭐ Advanced SQL Example
+### ⭐ Advanced SQL
 
 Category-level ranking is performed using:
 
@@ -203,7 +248,7 @@ RANK() OVER (
 )
 ```
 
-This makes it possible to identify the **top-performing pizzas within each category**, rather than simply ranking all pizzas globally.
+This allows individual pizzas to be ranked **within their respective categories** rather than across the entire dataset.
 
 ### 📁 Project Files
 
@@ -218,15 +263,153 @@ Pizza Case Study/
 └── pizzas.csv
 ```
 
-👉 **[Explore Pizza Case Study](https://github.com/theaditya24/SQL-PROJECTS/tree/main/Pizza%20Case%20Study)**
+👉 **[Explore Pizza Case Study](./Pizza%20Case%20Study)**
+
+---
+
+# 🛒 03 — Walmart Sales Analysis
+
+## 📌 Project Overview
+
+The **Walmart Sales Analysis** project focuses on analyzing retail transaction data to understand sales performance, customer behavior, product performance, branch-level performance, and profitability.
+
+The project applies SQL to transform transactional retail data into meaningful business insights.
+
+---
+
+## 🎯 Analysis Objectives
+
+The analysis focuses on:
+
+* Revenue performance
+* Product-line performance
+* Branch performance
+* City-level performance
+* Customer behavior
+* Customer segmentation
+* Payment-method preferences
+* Sales patterns by time
+* Customer ratings
+* Cost of Goods Sold
+* VAT contribution
+* Gross income
+
+---
+
+## 🔍 Business Questions
+
+The project investigates questions such as:
+
+### General Analysis
+
+* How many unique cities are present?
+* Which branches operate in each city?
+* How many product lines are available?
+* What customer types exist?
+* What payment methods are used?
+
+### Product Analysis
+
+* Which product line is purchased most frequently?
+* Which product line generates the highest revenue?
+* Which product line generates the highest VAT?
+* Which product lines perform above average?
+* Which branches sell more products than the overall average?
+* Which product lines have the highest customer ratings?
+
+### Sales Analysis
+
+* What is the total revenue?
+* How does revenue vary by month?
+* Which city generates the highest revenue?
+* Which customer type generates the highest revenue?
+* Which customer type contributes the most VAT?
+* What are the busiest sales periods?
+* How does sales performance vary across branches?
+
+### Customer Analysis
+
+* Which customer type is most common?
+* What is the gender distribution?
+* How does gender distribution vary by branch?
+* Which payment method is most frequently used?
+* Which time of day receives the highest customer ratings?
+* Which weekday has the highest average rating?
+
+---
+
+## 🧠 SQL Techniques Demonstrated
+
+```text
+SELECT
+WHERE
+GROUP BY
+HAVING
+ORDER BY
+DISTINCT
+
+COUNT()
+SUM()
+AVG()
+MIN()
+MAX()
+
+CASE
+Subqueries
+CTEs
+Window Functions
+Ranking
+Conditional Aggregation
+Date Functions
+Time Functions
+Revenue Analysis
+Customer Segmentation
+Comparative Analysis
+```
+
+---
+
+## 💼 Business Areas Covered
+
+```text
+                 Walmart Sales Analysis
+                          │
+        ┌─────────────────┼─────────────────┐
+        │                 │                 │
+     Products          Customers          Branches
+        │                 │                 │
+        ▼                 ▼                 ▼
+   Sales Volume      Customer Type      Revenue
+   Revenue           Gender             Performance
+   VAT               Payment            Location
+   Ratings           Ratings            Comparison
+        │                 │                 │
+        └─────────────────┼─────────────────┘
+                          ▼
+                  Business Insights
+```
+
+---
+
+## 📁 Project Files
+
+```text
+Walmart Sales Analysis/
+│
+├── Walmart_Sales_Data.csv
+├── Walmart_sales_Analysis.sql
+└── README.md
+```
+
+👉 **[Explore Walmart Sales Analysis](./Walmart%20Sales%20Analysis)**
 
 ---
 
 # 🛠️ Technical Skills Demonstrated
 
-This repository focuses on practical SQL skills used in real-world analytics workflows.
+This portfolio focuses on SQL skills commonly used in real-world Data Analyst and Business Intelligence roles.
 
-### Core SQL
+## Core SQL
 
 * `SELECT`
 * `WHERE`
@@ -236,7 +419,7 @@ This repository focuses on practical SQL skills used in real-world analytics wor
 * `LIMIT`
 * `DISTINCT`
 
-### Aggregation
+## Aggregation
 
 * `COUNT()`
 * `SUM()`
@@ -244,14 +427,14 @@ This repository focuses on practical SQL skills used in real-world analytics wor
 * `MAX()`
 * `MIN()`
 
-### Data Relationships
+## Data Relationships
 
 * `INNER JOIN`
 * Multi-table joins
 * Relational data modeling
 * Primary & foreign-key relationships
 
-### Advanced SQL
+## Advanced SQL
 
 * Common Table Expressions
 * Subqueries
@@ -259,9 +442,10 @@ This repository focuses on practical SQL skills used in real-world analytics wor
 * `RANK()`
 * `DENSE_RANK()`
 * `PARTITION BY`
-* Running / cumulative calculations
+* Running totals
+* Cumulative calculations
 
-### Data Transformation
+## Data Transformation
 
 * String manipulation
 * Date & time functions
@@ -269,70 +453,72 @@ This repository focuses on practical SQL skills used in real-world analytics wor
 * Conditional logic using `CASE`
 * Data categorization
 
-### Business Analytics
+## Business Analytics
 
 * Revenue analysis
 * Product performance
-* Trend analysis
-* Market/content analysis
+* Customer analysis
+* Sales trend analysis
 * Contribution analysis
 * Ranking analysis
+* Comparative analysis
+* Performance benchmarking
 
 ---
 
 # 🧩 SQL Problem-Solving Framework
 
-Each project follows a practical analytical workflow:
+Every project follows a structured analytical workflow:
 
 ```text
-                ┌───────────────────────┐
-                │    Business Problem   │
-                └───────────┬───────────┘
-                            │
-                            ▼
-                ┌───────────────────────┐
-                │   Understand Data     │
-                └───────────┬───────────┘
-                            │
-                            ▼
-                ┌───────────────────────┐
-                │   Explore Dataset     │
-                └───────────┬───────────┘
-                            │
-                            ▼
-                ┌───────────────────────┐
-                │ Build SQL Solution    │
-                └───────────┬───────────┘
-                            │
-                            ▼
-                ┌───────────────────────┐
-                │ Validate Results      │
-                └───────────┬───────────┘
-                            │
-                            ▼
-                ┌───────────────────────┐
-                │ Generate Insights     │
-                └───────────────────────┘
+┌─────────────────────────┐
+│    Business Problem     │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│     Understand Data     │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│     Explore Dataset     │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│   Build SQL Solution    │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│    Validate Results     │
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│   Generate Insights     │
+└─────────────────────────┘
 ```
 
-The emphasis is not simply on writing SQL queries, but on **using SQL as an analytical problem-solving tool**.
+The emphasis is on **using SQL as an analytical problem-solving tool**, not simply writing queries.
 
 ---
 
 # 📈 From SQL Queries to Business Decisions
 
-The projects demonstrate how SQL can answer questions that matter to businesses.
-
-| Business Need                            | SQL Analysis                 |
-| ---------------------------------------- | ---------------------------- |
-| What products sell the most?             | Ranking & aggregation        |
-| What generates the most revenue?         | Revenue analysis             |
-| When are customers most active?          | Time-based analysis          |
-| Which category performs best?            | Grouped aggregation          |
-| What content dominates a platform?       | Distribution analysis        |
-| Who are the key contributors?            | Ranking & frequency analysis |
-| How does performance accumulate?         | Window functions             |
-| Which segments should receive attention? | Comparative analysis         |
+| Business Question                            | SQL Approach            |
+| -------------------------------------------- | ----------------------- |
+| What products sell the most?                 | Aggregation + Ranking   |
+| What generates the most revenue?             | Revenue Analysis        |
+| When are customers most active?              | Date & Time Analysis    |
+| Which category performs best?                | Grouped Aggregation     |
+| Which branch performs best?                  | Comparative Analysis    |
+| Which customer segment is most valuable?     | Customer Segmentation   |
+| How does performance accumulate?             | Window Functions        |
+| Which products need attention?               | Benchmarking            |
+| Which categories contribute most to revenue? | Contribution Analysis   |
+| How do trends change over time?              | Time-Series Aggregation |
 
 ---
 
@@ -342,21 +528,25 @@ Beyond SQL syntax, this portfolio demonstrates my ability to:
 
 ### 01 — Translate Business Problems into SQL
 
-Convert natural-language business questions into structured analytical queries.
+Convert real-world business questions into structured analytical queries.
 
 ### 02 — Work with Relational Data
 
-Connect multiple datasets through appropriate joins and relationships.
+Connect multiple tables and datasets using appropriate relationships and joins.
 
 ### 03 — Perform Exploratory Analysis
 
-Use aggregation, filtering, grouping, and sorting to discover patterns.
+Use filtering, aggregation, grouping, and sorting to discover patterns.
 
 ### 04 — Apply Advanced SQL
 
 Use CTEs, subqueries, window functions, ranking, and partitioning to solve complex analytical problems.
 
-### 05 — Think in Business Terms
+### 05 — Analyze Business Performance
+
+Evaluate revenue, sales, customers, products, categories, and operational performance.
+
+### 06 — Think in Business Terms
 
 Focus on **why the analysis matters**, not just how the query works.
 
@@ -366,14 +556,14 @@ Focus on **why the analysis matters**, not just how the query works.
 
 ## Prerequisites
 
-Recommended:
+Recommended tools:
 
-* MySQL Workbench / MySQL Server
-* PostgreSQL for queries using PostgreSQL-specific syntax
+* **MySQL Server**
+* **MySQL Workbench**
 * Any SQL IDE
-* Git
+* **Git**
 
-> **Note:** Some queries in the Netflix project use PostgreSQL-specific functions such as `STRING_TO_ARRAY`, `UNNEST`, `SPLIT_PART`, `ILIKE`, and PostgreSQL-style casting. If running the project in MySQL, these queries may require syntax adaptations.
+Some projects may use SQL features specific to a particular database engine. Check the individual project README or SQL files before execution.
 
 ---
 
@@ -389,23 +579,21 @@ cd SQL-PROJECTS
 
 ---
 
-## 2. Open the Desired Project
+## 2. Choose a Project
 
 ```text
 SQL-PROJECTS/
 │
 ├── Netflix Project/
-│
-└── Pizza Case Study/
+├── Pizza Case Study/
+└── Walmart Sales Analysis/
 ```
 
 ---
 
 ## 3. Set Up the Database
 
-Create the required database and tables using the schema files provided with the projects.
-
-For example:
+Create the required database:
 
 ```sql
 CREATE DATABASE sql_projects;
@@ -413,27 +601,15 @@ CREATE DATABASE sql_projects;
 USE sql_projects;
 ```
 
-Then load the corresponding dataset.
+Then create/import the tables and datasets required by the selected project.
 
 ---
 
 ## 4. Execute the SQL Queries
 
-Open the relevant SQL file and execute the queries sequentially.
+Open the corresponding SQL file and execute the queries sequentially.
 
-For example:
-
-```text
-Netflix Project/
-└── Business Problems Answers.sql
-```
-
-or:
-
-```text
-Pizza Case Study/
-└── Bussiness Problem Answers.sql
-```
+Each project contains its own SQL scripts and datasets where applicable.
 
 ---
 
@@ -456,59 +632,92 @@ SQL-PROJECTS/
 │   ├── pizza_types.csv
 │   └── pizzas.csv
 │
+├── 📁 Walmart Sales Analysis/
+│   ├── Walmart_Sales_Data.csv
+│   ├── Walmart_sales_Analysis.sql
+│   └── README.md
+│
 └── 📄 README.md
 ```
 
 ---
 
+# 📊 Portfolio Growth
+
+This repository is continuously evolving as new analytical projects are added.
+
+### Current Portfolio
+
+| Project                   | Domain        | Status      |
+| ------------------------- | ------------- | ----------- |
+| 🎬 Netflix Data Analysis  | Entertainment | ✅ Completed |
+| 🍕 Pizza Sales Case Study | Food & Retail | ✅ Completed |
+| 🛒 Walmart Sales Analysis | Retail        | ✅ Completed |
+
+### Planned Projects
+
+Future projects may explore:
+
+* 🏦 Banking & Finance
+* 🏥 Healthcare Analytics
+* 🚗 E-Commerce
+* 📦 Supply Chain
+* 📱 Customer Analytics
+* 💳 Financial Transactions
+* 🎵 Music Analytics
+* 📊 Business Intelligence
+
+---
+
 # 🎯 Learning Roadmap
 
-This repository is intended to evolve as I build more advanced data analytics projects.
+### Completed
 
-### Current
-
-* [x] SQL fundamentals
-* [x] Aggregation & grouping
+* [x] SQL Fundamentals
+* [x] Aggregation & Grouping
 * [x] Joins
 * [x] Subqueries
-* [x] CTEs
-* [x] Window functions
+* [x] Common Table Expressions
+* [x] Window Functions
 * [x] Ranking
-* [x] Business problem solving
-* [x] Revenue analysis
-* [x] Time-based analysis
+* [x] Date & Time Analysis
+* [x] Revenue Analysis
+* [x] Customer Analysis
+* [x] Product Performance Analysis
+* [x] Business Problem Solving
 
-### Planned
+### Next Steps
 
-* [ ] Advanced SQL optimization
-* [ ] Complex data-cleaning workflows
-* [ ] More industry-specific case studies
-* [ ] SQL + Python analytics
-* [ ] SQL + Power BI dashboards
-* [ ] Automated data pipelines
-* [ ] Advanced analytical projects
+* [ ] Advanced SQL Optimization
+* [ ] Query Performance Tuning
+* [ ] Complex Data Cleaning
+* [ ] More Industry-Specific Case Studies
+* [ ] SQL + Python Analytics
+* [ ] SQL + Power BI Dashboards
+* [ ] Automated Data Pipelines
+* [ ] Advanced Business Intelligence Projects
 
 ---
 
 # 💼 Why These Projects Matter
 
-These projects are intentionally structured around **business questions** rather than simply showcasing isolated SQL commands.
+These projects are intentionally structured around **business questions rather than isolated SQL exercises**.
 
-A strong data analyst needs to be able to move through the complete chain:
+A Data Analyst should be able to move through the complete analytical chain:
 
 > **Business Question → Data → SQL → Analysis → Insight → Decision**
 
-That is the core skillset this repository is designed to demonstrate.
+That is the core capability this portfolio is designed to demonstrate.
 
 ---
 
 # 👨‍💻 About Me
 
-### Aditya Raj
+## Aditya Raj
 
 **Aspiring Data Analyst | SQL | Python | Machine Learning | Data Analytics**
 
-I am building projects focused on transforming data into meaningful insights and developing practical skills in **SQL, data analysis, and machine learning**.
+I am building practical data analytics projects focused on transforming raw data into meaningful insights and developing industry-relevant skills in SQL, Python, data analysis, and machine learning.
 
 ### Connect With Me
 
@@ -519,13 +728,13 @@ I am building projects focused on transforming data into meaningful insights and
 
 # ⭐ Support
 
-If you find these projects useful or want to follow my data analytics journey:
+If you find these projects useful or want to follow my Data Analytics journey:
 
-**⭐ Star this repository**
+⭐ **Star this repository**
 
-**🍴 Fork it**
+🍴 **Fork the repository**
 
-**📌 Explore the individual projects**
+📌 **Explore the individual projects**
 
 ---
 
